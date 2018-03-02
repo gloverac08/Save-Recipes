@@ -1,7 +1,9 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var request = require('request')
-var app = express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const request = require('request');
+const app = express();
+const db = require('../models/index.js');
+
 
 const port = process.env.PORT || 3000;
 
