@@ -9,7 +9,7 @@ if (!global.hasOwnProperty('db')) {
     sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_BRONZE_URL, {
       dialect: 'postgres',
       protocol: 'postgres',
-      port: match[4],
+      port: process.env.PORT
       host: match[3],
       logging: true //false
     })
