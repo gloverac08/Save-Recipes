@@ -4,7 +4,7 @@ if (!global.hasOwnProperty('db')) {
   var Sequelize = require('sequelize')
     , sequelize = null
 
-  if (process.env.HEROKU_POSTGRESQL_BRONZE_URL) {
+  if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
     // the application is executed on Heroku ... use the postgres database
     sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_BRONZE_URL, {
       dialect: 'postgres',
