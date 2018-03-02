@@ -2,11 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
-const db = require('../models/index.js');
+const db = require('../models');
+require('dotenv').config();
 
 
 const port = process.env.PORT || 3000;
-
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json())
 
@@ -15,8 +15,11 @@ app.post('/', function(req, res) {
   
 })
 
-db.sequelize.sync().then(function () {
-  app.listen(port, function() {
+db.sequelize.sync({force: true}).then(() => {
+  app.listen(port, () => {
     console.log('listening on port ' + port + '!');
-  });
+  })
+  .catch(err => {
+    console.log('error:', err);
+  })
 });

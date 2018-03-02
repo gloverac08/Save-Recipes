@@ -1,34 +1,47 @@
 'use strict';
 
-if (!global.hasOwnProperty('db')) {
-  var Sequelize = require('sequelize')
-    , sequelize = null
+var Sequelize = require('sequelize')
+  , sequelize = null
 
-  if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
-    // the application is executed on Heroku ... use the postgres database
-    sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_PURPLE_URL, {
-      dialect: 'postgres',
-      protocol: 'postgres',
-      port: process.env.PORT,
-      // host: match[3],
-      logging: true //false
-    })
-  } else {
-    // the application is executed on the local machine ... use mysql
-    sequelize = new Sequelize('example-app-db', 'root', null)
-  }
+// if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
+//   // the application is executed on Heroku ... use the postgres database
+//   sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_PURPLE_URL, {
+//     dialect: 'postgres',
+//     protocol: 'postgres',
+//     port: process.env.PORT,
+//     logging: true,
+//     operatorsAliases: false
+//   })
+// } else {
+  // the application is executed on the local machine ... use mysql
+  sequelize = new Sequelize('saveRecipes', 'root', null, {
+    host: 'localhost',
+    dialect: "mysql",
+    port: 3000
+    // dialectOptions: {
+    //   socketPath: "/var/run/mysqld/mysqld.sock"
+    // }
+  })
 
-  global.db = {
-    Sequelize: Sequelize,
-    sequelize: sequelize,
-    User: sequelize.import(__dirname + '/user')
-    // add your other models here
-  }
+  sequelize
+    .authenticate()
+    .then(function (err) {
+      console.log('Connection has been established successfully.');
+    }, function (err) {
+      console.log('Unable to connect to the database:', err);
+    });
+// }
 
-  /*
-    Associations can be defined here. E.g. like this:
-    global.db.User.hasMany(global.db.SomethingElse)
-  */
+const db = {
+  Sequelize: Sequelize,
+  sequelize: sequelize,
+  User: sequelize.import(__dirname + '/user'),
+  Recipe: sequelize.import(__dirname + '/recipe')
 }
 
-module.exports = global.db
+// Associations
+db.Recipe.belongsToMany(db.User, { through: 'UserRecipe' });
+db.User.belongsToMany(db.Recipe, { through: 'UserRecipe' });
+
+
+module.exports = db;
