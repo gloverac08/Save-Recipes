@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
 const db = require('../models');
+const helpers = require('./helpers');
 require('dotenv').config();
 
 
@@ -10,12 +11,29 @@ const port = process.env.PORT || 3306;
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json())
 
-// Due to express, when you load the page, it doesnt make a get request to '/', it simply serves up the dist folder
-app.post('/', function(req, res) {
-  
+
+app.post('/createAccount', (req, res) => {
+  console.log('req.body in /createAccount:', req.body);
+  helpers.addUser(req.body.username, req.body.password, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.post('/search', (req, res) => {
+  console.log('req.body in /search:', req.body);
+  helpers.apiCall(req.body.q, (err, data) => {
+    if (err) {
+      res.status(400).send(err);
+    }
+    res.send(data);
+  });
 })
 
-db.sequelize.sync({force: true}).then(() => {
+db.sequelize.sync().then(() => {
   app.listen(port, () => {
     console.log('listening on port ' + port + '!');
   })
