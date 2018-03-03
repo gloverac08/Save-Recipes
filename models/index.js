@@ -18,9 +18,6 @@ if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
     host: 'localhost',
     dialect: "mysql",
     port: 3306
-    // dialectOptions: {
-    //   socketPath: "/var/run/mysqld/mysqld.sock"
-    // }
   })
 
   sequelize
