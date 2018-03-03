@@ -8,7 +8,7 @@ class App extends React.Component {
   constructor(props) {
   	super(props)
   	this.state = {
-      user: '',
+      user: 'amy',
       searchItems: ''
   	}
   }
@@ -19,7 +19,6 @@ class App extends React.Component {
   }
 
   search(query) { // this is still working
-    var context = this;
     axios.post('/search', { 
       'q': query 
     })
@@ -27,7 +26,8 @@ class App extends React.Component {
         this.setState({
           searchItems: res.data
         }, () => {
-          console.log(this.state.searchItems);
+          console.log('this.state.searchItems:', this.state.searchItems);
+          this.addToFavs(this.state.searchItems[0]);
         });
       })
       .catch(err => {
@@ -42,7 +42,7 @@ class App extends React.Component {
     })
       .then(res => {
         console.log('res from post/createAccount:', res.data);
-        context.setState({
+        this.setState({
           user: res.data
         })
         // call get favs now
@@ -50,6 +50,19 @@ class App extends React.Component {
       .catch(err => {
         console.log('error in post/createAccount:', err);
       });
+  }
+
+  addToFavs (recipe) {
+    axios.post('/saveRecipe', {
+      username: this.state.user,
+      recipe: recipe
+    })
+      .then(res => {
+        console.log('res from post/saveRecipe:', res.data);
+      })
+      .catch(err => {
+        console.log('err in post/saveRecipe:', err);
+      })
   }
 
   render () {

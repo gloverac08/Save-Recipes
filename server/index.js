@@ -33,6 +33,16 @@ app.post('/search', (req, res) => {
   });
 })
 
+app.post('/saveRecipe', (req, res) => {
+  console.log('req.body.recipe in /saveRecipes', req.body.recipe);
+  helpers.saveRecipe(req.body.username, req.body.recipe, (err, data) => {
+    if (err) {
+
+    } 
+    res.send(data);
+  })
+});
+
 db.sequelize.sync().then(() => {
   app.listen(port, () => {
     console.log('listening on port ' + port + '!');

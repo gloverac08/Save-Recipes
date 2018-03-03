@@ -74,6 +74,7 @@ const saveRecipe = (username, recipe, callback) => {
       })
         .then(user => {
           user.addRecipe(recipe);
+          callback(null, 'recipe saved');
         })
     })
 };

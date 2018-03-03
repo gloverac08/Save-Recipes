@@ -12,8 +12,10 @@ if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
     logging: true,
     operatorsAliases: false,
     define: {
-      underscored: true
-    }
+      underscored: true,
+      timestamps: false
+    },
+   
   })
 } else {
   // the application is executed on the local machine ... use mysql
@@ -22,7 +24,8 @@ if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
     dialect: "mysql",
     port: 3306,
     define: {
-      underscored: true
+      underscored: true,
+      timestamps: false
     }
   })
 
