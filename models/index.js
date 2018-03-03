@@ -10,14 +10,20 @@ if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
     protocol: 'postgres',
     port: process.env.PORT,
     logging: true,
-    operatorsAliases: false
+    operatorsAliases: false,
+    define: {
+      underscored: true
+    }
   })
 } else {
   // the application is executed on the local machine ... use mysql
   sequelize = new Sequelize('saveRecipes', 'root', null, {
     host: 'localhost',
     dialect: "mysql",
-    port: 3306
+    port: 3306,
+    define: {
+      underscored: true
+    }
   })
 
   sequelize

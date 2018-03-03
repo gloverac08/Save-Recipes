@@ -68,6 +68,14 @@ const saveRecipe = (username, recipe, callback) => {
       ingredients: JSON.stringify(recipe.ingredients),
     }
   })
+    .spread((recipe, create) => {
+      db.User.findOne({
+        where: {username: username}
+      })
+        .then(user => {
+          user.addRecipe(recipe);
+        })
+    })
 };
 
 const getFavRecipes = () => {
