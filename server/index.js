@@ -23,6 +23,16 @@ app.post('/createAccount', (req, res) => {
   });
 });
 
+app.post('/login', (req, res) => {
+  console.log('req.body in /login:', req.body);
+  helpers.checkUser(req.body.username, req.body.password, (err, user) => {
+    if (err) {
+      res.send('invalid credentials');
+    }
+    res.send(user);
+  });
+});
+
 app.post('/search', (req, res) => {
   console.log('req.body in /search:', req.body);
   helpers.apiCall(req.body.q, (err, data) => {

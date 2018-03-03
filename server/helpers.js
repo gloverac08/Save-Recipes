@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 const request = require('request');
 require('dotenv').config();
 
+const saltRounds = 10;
+const salt = bcrypt.genSaltSync(saltRounds);
+
 const processData = (data) => {
   var recipes = [];
   data.forEach(function (item) {
@@ -33,11 +36,9 @@ const apiCall = (query, callback) => {
 };
 
 const hashPassword = password => {
-    const saltRounds = 10;
-    const salt = bcrypt.genSaltSync(saltRounds);
-    let hash = bcrypt.hashSync(password, salt);
-    return hash;
-  };
+  let hash = bcrypt.hashSync(password, salt);
+  return hash;
+};
 
 
 const addUser = (username, password, callback) => {
@@ -93,12 +94,19 @@ const getFavRecipes = (username, callback) => {
     })
 };
 
-const checkUser = () => {
-  // checks if user exists
-  // if so, checks if passwords match
+const checkUser = (username, password, callback) => {
+  db.User.findOne({
+    where: {username: username}
+  })
+    .then(user => {
+      console.log('user in checkUser:', user);
+      const isMatch = bcrypt.compareSync(password, user.password);
+      isMatch ? callback(null, username) : callback(true);
+    })
 };
 
 module.exports.apiCall = apiCall;
 module.exports.addUser = addUser;
 module.exports.saveRecipe = saveRecipe;
 module.exports.getFavRecipes = getFavRecipes;
+module.exports.checkUser = checkUser;

@@ -16,7 +16,8 @@ class App extends React.Component {
   componentDidMount () {
     // this.createAccount('amy', 'kitty');
     this.search('apples');
-    this.getFavorites();
+    // this.getFavorites();
+    this.login('amy', 'kitty');
   }
 
   search(query) { // this is still working
@@ -51,6 +52,24 @@ class App extends React.Component {
       .catch(err => {
         console.log('error in post/createAccount:', err);
       });
+  }
+
+  login (username, password) {
+    axios.post('/login', {
+      username: username,
+      password: password
+    })
+      .then(res => {
+        console.log('res from post/login:', res.data);
+        this.setState({
+          user: res.data
+        }, () => {
+          console.log('this.state.user:', this.state.user);
+        })
+      })
+      .catch(err => {
+        console.log('error in post/login:', err);
+      })
   }
 
   addToFavs (recipe) {
