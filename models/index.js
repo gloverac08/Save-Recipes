@@ -3,16 +3,16 @@
 var Sequelize = require('sequelize')
   , sequelize = null
 
-// if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
-//   // the application is executed on Heroku ... use the postgres database
-//   sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_PURPLE_URL, {
-//     dialect: 'postgres',
-//     protocol: 'postgres',
-//     port: process.env.PORT,
-//     logging: true,
-//     operatorsAliases: false
-//   })
-// } else {
+if (process.env.HEROKU_POSTGRESQL_PURPLE_URL) {
+  // the application is executed on Heroku ... use the postgres database
+  sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_PURPLE_URL, {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    port: process.env.PORT,
+    logging: true,
+    operatorsAliases: false
+  })
+} else {
   // the application is executed on the local machine ... use mysql
   sequelize = new Sequelize('saveRecipes', 'root', null, {
     host: 'localhost',
@@ -30,7 +30,7 @@ var Sequelize = require('sequelize')
     }, function (err) {
       console.log('Unable to connect to the database:', err);
     });
-// }
+}
 
 const db = {
   Sequelize: Sequelize,
