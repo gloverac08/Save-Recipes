@@ -72,6 +72,16 @@ class App extends React.Component {
       })
   }
 
+  logout () {
+    this.setState({
+      user: ''
+    }, () => {
+      console.log('this.state.user:', this.state.user);
+    })
+  }
+    
+ 
+
   addToFavs (recipe) {
     axios.post('/saveRecipe', {
       username: this.state.user,
