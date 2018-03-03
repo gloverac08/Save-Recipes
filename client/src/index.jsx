@@ -8,15 +8,15 @@ class App extends React.Component {
   constructor(props) {
   	super(props)
   	this.state = {
-      user: 'amy',
-      searchItems: ''
+      user: '',
+      searchItems: '',
+      favorties: null
   	}
   }
 
   componentDidMount () {
     // this.createAccount('amy', 'kitty');
     this.search('apples');
-    // this.getFavorites();
     this.login('amy', 'kitty');
   }
 
@@ -29,7 +29,6 @@ class App extends React.Component {
           searchItems: res.data
         }, () => {
           console.log('this.state.searchItems:', this.state.searchItems);
-          // this.addToFavs(this.state.searchItems[0]);
         });
       })
       .catch(err => {
@@ -65,6 +64,7 @@ class App extends React.Component {
           user: res.data
         }, () => {
           console.log('this.state.user:', this.state.user);
+          this.getFavorites()
         })
       })
       .catch(err => {
@@ -101,9 +101,9 @@ class App extends React.Component {
     })
       .then(res => {
         console.log('res.data from post/getFavorites:', res.data);
-        // this.setState({
-        //   favorites: res.data
-        // })
+        this.setState({
+          favorites: res.data
+        })
       })
       .catch(err => {
         console.log('err in post/getFavorites:', err);

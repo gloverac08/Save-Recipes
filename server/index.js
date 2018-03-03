@@ -27,7 +27,11 @@ app.post('/login', (req, res) => {
   console.log('req.body in /login:', req.body);
   helpers.checkUser(req.body.username, req.body.password, (err, user) => {
     if (err) {
-      res.send('invalid credentials');
+      if (user === 'invalid password') {
+        res.send(user);
+      } else if (user === 'invalid username') {
+        res.send(user);
+      }
     }
     res.send(user);
   });

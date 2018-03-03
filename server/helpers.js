@@ -21,16 +21,12 @@ const processData = (data) => {
 };
 
 const apiCall = (query, callback) => {
-  console.log('query in apiCall:', query)
-  console.log('appkey:', process.env.APP_ID);
   request(`https://api.edamam.com/search?q=${query}&app_id=${process.env.APP_ID}&app_key=${process.env.API_KEY}`, (err, response, body) => {
     if (err) {
       callback(err);
     } 
-    
     var dataParsed = JSON.parse(body);
     var processed = processData(dataParsed.hits);
-    console.log('processed:', processed);
     callback(null, processed);
   })
 };
@@ -81,15 +77,15 @@ const saveRecipe = (username, recipe, callback) => {
 };
 
 const getFavRecipes = (username, callback) => {
-  // gets recipes associated with that user
   db.User.findOne({
     where: {username: username}
   })
     .then(user => {
-      user.getRecipes()
-        .then(recipes => {
-          console.log('recipes from getFavRecipes:', recipes);
-          callback(null, recipes);
+      console.log('uesr in getFavRecipes:', user);
+        user.getRecipes()
+          .then(recipes => {
+            console.log('recipes from getFavRecipes:', recipes);
+            callback(null, recipes);
         })
     })
 };
@@ -99,9 +95,13 @@ const checkUser = (username, password, callback) => {
     where: {username: username}
   })
     .then(user => {
-      console.log('user in checkUser:', user);
-      const isMatch = bcrypt.compareSync(password, user.password);
-      isMatch ? callback(null, username) : callback(true);
+      if (user) {
+        console.log('user in checkUser:', user);
+        const isMatch = bcrypt.compareSync(password, user.password);
+        isMatch ? callback(null, username) : callback(true, 'invalid password');
+      } else {
+        callback(true, 'invalid username');
+      }
     })
 };
 
