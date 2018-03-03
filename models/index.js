@@ -17,7 +17,7 @@ var Sequelize = require('sequelize')
   sequelize = new Sequelize('saveRecipes', 'root', null, {
     host: 'localhost',
     dialect: "mysql",
-    port: 3000
+    port: 3306
     // dialectOptions: {
     //   socketPath: "/var/run/mysqld/mysqld.sock"
     // }

@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "root",
+    "database": "saveRecipes",
+    "dialect": "mysql"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  }
+}
