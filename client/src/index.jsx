@@ -16,6 +16,7 @@ class App extends React.Component {
   componentDidMount () {
     // this.createAccount('amy', 'kitty');
     this.search('apples');
+    this.getFavorites();
   }
 
   search(query) { // this is still working
@@ -27,7 +28,7 @@ class App extends React.Component {
           searchItems: res.data
         }, () => {
           console.log('this.state.searchItems:', this.state.searchItems);
-          this.addToFavs(this.state.searchItems[0]);
+          // this.addToFavs(this.state.searchItems[0]);
         });
       })
       .catch(err => {
@@ -62,6 +63,21 @@ class App extends React.Component {
       })
       .catch(err => {
         console.log('err in post/saveRecipe:', err);
+      })
+  }
+
+  getFavorites () {
+    axios.post('/getFavorites', {
+      username: this.state.user
+    })
+      .then(res => {
+        console.log('res.data from post/getFavorites:', res.data);
+        // this.setState({
+        //   favorites: res.data
+        // })
+      })
+      .catch(err => {
+        console.log('err in post/getFavorites:', err);
       })
   }
 

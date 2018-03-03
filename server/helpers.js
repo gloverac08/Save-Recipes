@@ -79,8 +79,18 @@ const saveRecipe = (username, recipe, callback) => {
     })
 };
 
-const getFavRecipes = () => {
+const getFavRecipes = (username, callback) => {
   // gets recipes associated with that user
+  db.User.findOne({
+    where: {username: username}
+  })
+    .then(user => {
+      user.getRecipes()
+        .then(recipes => {
+          console.log('recipes from getFavRecipes:', recipes);
+          callback(null, recipes);
+        })
+    })
 };
 
 const checkUser = () => {
@@ -91,3 +101,4 @@ const checkUser = () => {
 module.exports.apiCall = apiCall;
 module.exports.addUser = addUser;
 module.exports.saveRecipe = saveRecipe;
+module.exports.getFavRecipes = getFavRecipes;

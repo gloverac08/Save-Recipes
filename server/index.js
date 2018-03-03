@@ -43,6 +43,16 @@ app.post('/saveRecipe', (req, res) => {
   })
 });
 
+app.post('/getFavorites', (req, res) => {
+  console.log('req.body.username in /getFavorites:', req.body.username);
+  helpers.getFavRecipes(req.body.username, (err, result) => {
+    if (err) {
+
+    }
+    res.send(result);
+  });
+});
+
 db.sequelize.sync().then(() => {
   app.listen(port, () => {
     console.log('listening on port ' + port + '!');
