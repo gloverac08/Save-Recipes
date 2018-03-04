@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import axios from 'axios';
-import { Card, Icon, Image } from 'semantic-ui-react'
+import { Card, Icon, Image } from 'semantic-ui-react';
+import SearchList from './searchList.jsx';
+import List from './list.jsx';
 // import AnyComponent from './components/filename.jsx'
 
 class App extends React.Component {
@@ -18,7 +20,7 @@ class App extends React.Component {
   componentDidMount () {
     // this.createAccount('amy', 'kitty');
     this.search('apples');
-    this.login('amy', 'kitty');
+    // this.login('amy', 'kitty');
   }
 
   search(query) { // this is still working
@@ -104,6 +106,8 @@ class App extends React.Component {
         console.log('res.data from post/getFavorites:', res.data);
         this.setState({
           favorites: res.data
+        }, () => {
+          console.log('this.state.favorites:', this.state.favorites);
         })
       })
       .catch(err => {
@@ -112,27 +116,22 @@ class App extends React.Component {
   }
 
   render () {
-    if (this. state.searchItems) {
+    const styles = {
+      main: {
+        backgroundColor: '#e3e6eb'
+      }
+    }
+    if (this.state.favorites) {
       return (
-        <Card>
-          <Image src={this.state.searchItems[0].image} />
-          <Card.Content>
-            <Card.Header>
-              {this.state.searchItems[0].title}
-          </Card.Header>
-            <Card.Meta>
-              <span>
-                Source: {this.state.searchItems[0].source}
-            </span>
-            </Card.Meta>
-            <Card.Description>
-              Ingredients: {this.state.searchItems[0].ingredients}
-          </Card.Description>
-          </Card.Content>
-          <Card.Content extra>
-            <a href={this.state.searchItems[0].link} target="_blank">See the full recipe</a>
-          </Card.Content>
-        </Card>
+        <div style={styles.main}>
+          <List favItems={this.state.favorites} />
+        </div>
+      )
+    } else if (this. state.searchItems) {
+      return (
+        <div style={styles.main}>
+        <SearchList searchItems={this.state.searchItems} addToFavs={this.addToFavs.bind(this)} />
+        </div>
       )
     } else {
       return (
