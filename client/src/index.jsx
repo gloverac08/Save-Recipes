@@ -123,10 +123,12 @@ class App extends React.Component {
         // marginBottom: 10
       },
       header: {
-        backgroundColor: '#597a7a'
+        backgroundColor: '#e23284'
       },
       segment: {
-        color: '#eef0f0'
+        color: '#eef0f0',
+        fontSize: 30,
+        fontStyle: 'italic'
       },
       input: {
         marginBottom: 10,
