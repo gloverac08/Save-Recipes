@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import axios from 'axios';
+import { Card, Icon, Image } from 'semantic-ui-react'
 // import AnyComponent from './components/filename.jsx'
 
 class App extends React.Component {
@@ -111,7 +112,35 @@ class App extends React.Component {
   }
 
   render () {
-  	return (<div>Hello World</div>)
+    if (this. state.searchItems) {
+      return (
+        <Card>
+          <Image src={this.state.searchItems[0].image} />
+          <Card.Content>
+            <Card.Header>
+              {this.state.searchItems[0].title}
+          </Card.Header>
+            <Card.Meta>
+              <span>
+                Source: {this.state.searchItems[0].source}
+            </span>
+            </Card.Meta>
+            <Card.Description>
+              Ingredients: {this.state.searchItems[0].ingredients}
+          </Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            <a href={this.state.searchItems[0].link} target="_blank">See the full recipe</a>
+          </Card.Content>
+        </Card>
+      )
+    } else {
+      return (
+        <div>
+          <div>Hello World</div>
+        </div>
+      )
+    }
   }
 }
 

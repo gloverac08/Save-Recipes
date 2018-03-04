@@ -8,12 +8,13 @@ const salt = bcrypt.genSaltSync(saltRounds);
 
 const processData = (data) => {
   var recipes = [];
+  console.log('data:', data);
   data.forEach(function (item) {
     recipes.push({
       title: item.recipe.label,
       image: item.recipe.image,
       source: item.recipe.source,
-      link: item.recipe.shareAs,
+      link: item.recipe.url,
       ingredients: item.recipe.ingredientLines
     });
   })
