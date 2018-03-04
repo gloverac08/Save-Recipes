@@ -132,7 +132,10 @@ class App extends React.Component {
       },
       input: {
         marginBottom: 10,
-        marginLeft: 10
+        marginLeft: 40
+      },
+      grid: {
+        marginLeft: 40
       }
     }
 
@@ -149,7 +152,7 @@ class App extends React.Component {
         <div>
           <Input style={styles.input} size='large' action={{ icon: 'search' }} placeholder='Search...' />
         </div>
-        <div>
+        <div style={styles.grid}>
           {this.state.favorites ? 
             <div style={styles.main}>
               <List favItems={this.state.favorites} />
@@ -157,7 +160,7 @@ class App extends React.Component {
             :
             <div></div>}
         </div>
-        <div>
+        <div style={styles.grid}>
           {this.state.searchItems ?
             <div >
             <SearchList searchItems={this.state.searchItems} addToFavs={this.addToFavs.bind(this)} />
