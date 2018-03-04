@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import axios from 'axios';
-import { Card, Icon, Image } from 'semantic-ui-react';
+import { Card, Icon, Image, Header, Segment, Input } from 'semantic-ui-react';
 import SearchList from './searchList.jsx';
 import List from './list.jsx';
+
 // import AnyComponent from './components/filename.jsx'
 
 class App extends React.Component {
@@ -118,28 +119,52 @@ class App extends React.Component {
   render () {
     const styles = {
       main: {
-        backgroundColor: '#e3e6eb'
+        backgroundColor: '#e3e6eb',
+        // marginBottom: 10
+      },
+      header: {
+        backgroundColor: '#597a7a'
+      },
+      segment: {
+        color: '#eef0f0'
+      },
+      input: {
+        marginBottom: 10,
+        marginLeft: 10
       }
     }
-    if (this.state.favorites) {
-      return (
-        <div style={styles.main}>
-          <List favItems={this.state.favorites} />
-        </div>
-      )
-    } else if (this. state.searchItems) {
-      return (
-        <div style={styles.main}>
-        <SearchList searchItems={this.state.searchItems} addToFavs={this.addToFavs.bind(this)} />
-        </div>
-      )
-    } else {
-      return (
+
+    return (
+      <div style={styles.main}>
+        <Segment style={styles.header} clearing>
+          <Header as='h2' floated='right' style={styles.segment}>
+            Login/Create Account Buttons here
+          </Header>
+          <Header as='h2' floated='left' style={styles.segment}>
+            Recipe Collect
+           </Header>
+        </Segment>
         <div>
-          <div>Hello World</div>
+          <Input style={styles.input} size='large' action={{ icon: 'search' }} placeholder='Search...' />
         </div>
-      )
-    }
+        <div>
+          {this.state.favorites ? 
+            <div style={styles.main}>
+              <List favItems={this.state.favorites} />
+            </div>
+            :
+            <div></div>}
+        </div>
+        <div>
+          {this.state.searchItems ?
+            <div >
+            <SearchList searchItems={this.state.searchItems} addToFavs={this.addToFavs.bind(this)} />
+            </div>
+            :
+            <div></div>}
+        </div>
+      </div>
+    )
   }
 }
 

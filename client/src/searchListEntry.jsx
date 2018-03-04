@@ -9,10 +9,6 @@ class SearchListEntry extends React.Component {
     }
   }
 
-  componentDidMount() {
-    console.log('this.state.searchItem.ingredients:', this.state.searchItem.ingredients);
-  }
-
   clickHandler() {
     this.props.addToFavs(this.state.searchItem);
   }
