@@ -63,7 +63,7 @@ const saveRecipe = (username, recipe, callback) => {
       image: recipe.image,
       source: recipe.source,
       link: recipe.link,
-      ingredients: JSON.stringify(recipe.ingredients),
+      ingredients: JSON.stringify(recipe.ingredients).slice(0, 121),
     }
   })
     .spread((recipe, create) => {

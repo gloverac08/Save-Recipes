@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import axios from 'axios';
-import { Card, Icon, Image, Header, Segment, Input } from 'semantic-ui-react';
+import { Card, Icon, Image, Header, Segment, Input, Button, Modal, Form, Checkbox } from 'semantic-ui-react';
 import SearchList from './searchList.jsx';
 import List from './list.jsx';
+import Search from './search.jsx';
 
 // import AnyComponent from './components/filename.jsx'
 
@@ -12,16 +13,19 @@ class App extends React.Component {
   constructor(props) {
   	super(props)
   	this.state = {
-      user: '',
+      user: 'sample',
       searchItems: '',
-      favorties: null
+      favorties: null,
+      submittedUsername: '',
+      submittedPassword: ''
   	}
   }
 
   componentDidMount () {
     // this.createAccount('amy', 'kitty');
-    this.search('apples');
-    // this.login('amy', 'kitty');
+    // this.search('wine');
+    this.getFavorites();
+    // this.login('sample', 'sample');
   }
 
   search(query) { // this is still working
@@ -59,8 +63,8 @@ class App extends React.Component {
 
   login (username, password) {
     axios.post('/login', {
-      username: username,
-      password: password
+      username: this.state.submittedUsername,
+      password: this.state.submittedPassword
     })
       .then(res => {
         console.log('res from post/login:', res.data);
@@ -69,6 +73,7 @@ class App extends React.Component {
         }, () => {
           console.log('this.state.user:', this.state.user);
           this.getFavorites()
+          // this.addToFavs(this.state.searchItems[2]);
         })
       })
       .catch(err => {
@@ -116,6 +121,16 @@ class App extends React.Component {
       })
   }
 
+  handleChange(e, name) {
+    console.log('data: from handleChange', e.target.value);
+    this.setState({ 
+      [name]: e.target.value 
+    }, () => {
+      console.log('this.state.submittedUsername:', this.state.submittedUsername);
+    })
+  }
+
+
   render () {
     const styles = {
       main: {
@@ -123,19 +138,18 @@ class App extends React.Component {
         // marginBottom: 10
       },
       header: {
-        backgroundColor: '#e23284'
+        backgroundColor: '#f57f6a'
       },
       segment: {
         color: '#eef0f0',
         fontSize: 30,
         fontStyle: 'italic'
       },
-      input: {
-        marginBottom: 10,
-        marginLeft: 40
-      },
       grid: {
         marginLeft: 40
+      },
+      button: {
+        margin: 10
       }
     }
 
@@ -143,14 +157,55 @@ class App extends React.Component {
       <div style={styles.main}>
         <Segment style={styles.header} clearing>
           <Header as='h2' floated='right' style={styles.segment}>
-            Login/Create Account Buttons here
+            {(this.state.user === 'sample') ? 
+            <span>
+                <Modal trigger={<Button style={styles.button} color='teal' size='medium'>Login</Button>} closeIcon>
+                  <Header content='Login' />
+                  <Modal.Content>
+                    <Form>
+                      <Form.Field>
+                        <label>Username</label>
+                        <input 
+                          placeholder='username' 
+                          name='submittedUsername'
+                          onChange={(e) => this.handleChange(e, 'submittedUsername')}  
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <label>Password</label>
+                        <input 
+                          placeholder='Password'
+                          name='submittedPassword'
+                          onChange={(e) => this.handleChange(e, 'submittedPassword')}
+                         />
+                      </Form.Field>
+                    </Form>
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button type='submit' onClick={this.login.bind(this)}>Submit</Button>
+                  </Modal.Actions>
+                </Modal>
+              <Button 
+                style={styles.button} 
+                color='teal' 
+                size='medium'
+                onClick={this.createAccount}
+                >Create Account
+                </Button> 
+            </span>
+            :
+            <span>
+              <Button style={styles.button} color='teal' size='medium'>View Favorites</Button>
+              <Button style={styles.button} color='teal' size='medium'>Logout</Button>
+            </span>
+            }
           </Header>
           <Header as='h2' floated='left' style={styles.segment}>
             Recipe Collect
            </Header>
         </Segment>
         <div>
-          <Input style={styles.input} size='large' action={{ icon: 'search' }} placeholder='Search...' />
+          <Search search={this.search.bind(this)}/>
         </div>
         <div style={styles.grid}>
           {this.state.favorites ? 
