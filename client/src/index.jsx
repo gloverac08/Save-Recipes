@@ -16,15 +16,16 @@ class App extends React.Component {
       user: 'sample',
       searchItems: '',
       favorties: null,
-      submittedUsername: '',
-      submittedPassword: ''
+      username: '',
+      password: '',
+      secondPassword: ''
   	}
   }
 
   componentDidMount () {
     // this.createAccount('amy', 'kitty');
     // this.search('wine');
-    this.getFavorites();
+    this.getFavorites('initial');
     // this.login('sample', 'sample');
   }
 
@@ -44,30 +45,28 @@ class App extends React.Component {
       });
   }
 
-  createAccount (username, password) { 
+  createAccount () { 
     axios.post('/createAccount', {
-      username: username,
-      password: password
+      username: this.state.username,
+      password: this.state.password
     })
       .then(res => {
         console.log('res from post/createAccount:', res.data);
         this.setState({
           user: res.data
-        })
-        // call get favs now
+        });
       })
       .catch(err => {
         console.log('error in post/createAccount:', err);
       });
   }
 
-  login (username, password) {
+  login () {
     axios.post('/login', {
-      username: this.state.submittedUsername,
-      password: this.state.submittedPassword
+      username: this.state.username,
+      password: this.state.password
     })
       .then(res => {
-        console.log('res from post/login:', res.data);
         this.setState({
           user: res.data
         }, () => {
@@ -83,38 +82,31 @@ class App extends React.Component {
 
   logout () {
     this.setState({
-      user: ''
-    }, () => {
-      console.log('this.state.user:', this.state.user);
+      user: 'sample'
     })
   }
     
- 
-
-  addToFavs (recipe) {
-    axios.post('/saveRecipe', {
-      username: this.state.user,
-      recipe: recipe
-    })
-      .then(res => {
-        console.log('res from post/saveRecipe:', res.data);
-      })
-      .catch(err => {
-        console.log('err in post/saveRecipe:', err);
-      })
+  checkPassword () {
+    return this.state.submitted2ndPasswordCreateAccount === this.state.submittedPasswordCreateAccount;
   }
 
-  getFavorites () {
+  getFavorites (type) {
     axios.post('/getFavorites', {
       username: this.state.user
     })
       .then(res => {
         console.log('res.data from post/getFavorites:', res.data);
-        this.setState({
-          favorites: res.data
-        }, () => {
-          console.log('this.state.favorites:', this.state.favorites);
-        })
+        if (type) {
+          this.setState({
+            sampleSearch: res.data
+          }, () => {
+            console.log('this.state.favorites:', this.state.favorites);
+          })
+        } else {
+          this.setState({
+            favorites: res.data
+          })
+        }
       })
       .catch(err => {
         console.log('err in post/getFavorites:', err);
@@ -125,8 +117,6 @@ class App extends React.Component {
     console.log('data: from handleChange', e.target.value);
     this.setState({ 
       [name]: e.target.value 
-    }, () => {
-      console.log('this.state.submittedUsername:', this.state.submittedUsername);
     })
   }
 
@@ -167,16 +157,16 @@ class App extends React.Component {
                         <label>Username</label>
                         <input 
                           placeholder='username' 
-                          name='submittedUsername'
-                          onChange={(e) => this.handleChange(e, 'submittedUsername')}  
+                          name='submittedUsernameLogin'
+                          onChange={(e) => this.handleChange(e, 'username')}  
                         />
                       </Form.Field>
                       <Form.Field>
                         <label>Password</label>
                         <input 
                           placeholder='Password'
-                          name='submittedPassword'
-                          onChange={(e) => this.handleChange(e, 'submittedPassword')}
+                          name='submittedPasswordPassword'
+                          onChange={(e) => this.handleChange(e, 'password')}
                          />
                       </Form.Field>
                     </Form>
@@ -185,18 +175,49 @@ class App extends React.Component {
                     <Button type='submit' onClick={this.login.bind(this)}>Submit</Button>
                   </Modal.Actions>
                 </Modal>
-              <Button 
-                style={styles.button} 
-                color='teal' 
-                size='medium'
-                onClick={this.createAccount}
-                >Create Account
-                </Button> 
+                <Modal 
+                  trigger={<Button
+                    style={styles.button}
+                    color='teal'
+                    size='medium'
+                    >Create Account
+                      </Button> } 
+                  closeIcon>
+                  <Header content='Login' />
+                  <Modal.Content>
+                    <Form>
+                      <Form.Field>
+                        <label>Username</label>
+                        <input
+                          placeholder='username'
+                          onChange={(e) => this.handleChange(e, 'username')}
+                        />
+                      </Form.Field>
+                      <Form.Field>
+                        <label>Password</label>
+                        <input
+                          placeholder='Password'
+                            onChange={(e) => this.handleChange(e, 'password')}
+                        />
+                        <Form.Field>
+                          <label>Re-enter Password</label>
+                          <input
+                            placeholder='username'
+                              onChange={(e) => {this.checkPassword() ? this.handleChange(e, 'secondPassword') : null }}
+                          />
+                        </Form.Field>
+                      </Form.Field>
+                    </Form>
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button type='submit' onClick={this.createAccount.bind(this)}>Submit</Button>
+                  </Modal.Actions>
+                </Modal>
             </span>
             :
             <span>
               <Button style={styles.button} color='teal' size='medium'>View Favorites</Button>
-              <Button style={styles.button} color='teal' size='medium'>Logout</Button>
+              <Button style={styles.button} color='teal' size='medium' onClick={this.logout.bind(this)} >Logout</Button>
             </span>
             }
           </Header>
@@ -208,7 +229,7 @@ class App extends React.Component {
           <Search search={this.search.bind(this)}/>
         </div>
         <div style={styles.grid}>
-          {this.state.favorites ? 
+          {this.state.favorites && !this.state.searchItems ? 
             <div style={styles.main}>
               <List favItems={this.state.favorites} />
             </div>
@@ -218,7 +239,10 @@ class App extends React.Component {
         <div style={styles.grid}>
           {this.state.searchItems ?
             <div >
-            <SearchList searchItems={this.state.searchItems} addToFavs={this.addToFavs.bind(this)} />
+            <SearchList 
+              searchItems={this.state.searchItems} 
+              user={this.state.user} 
+            />
             </div>
             :
             <div></div>}
