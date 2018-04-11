@@ -18,7 +18,8 @@ class App extends React.Component {
       favorties: null,
       username: '',
       password: '',
-      secondPassword: ''
+      secondPassword: '',
+      sampleSearch: ''
   	}
   }
 
@@ -98,9 +99,14 @@ class App extends React.Component {
         console.log('res.data from post/getFavorites:', res.data);
         if (type) {
           this.setState({
-            sampleSearch: res.data
+            sampleSearch: res.data,
+            favorites: res.data
           }, () => {
             console.log('this.state.favorites:', this.state.favorites);
+          })
+        } else if (!res.data.length) {
+          this.setState({
+            favorites: this.state.sampleSearch
           })
         } else {
           this.setState({
