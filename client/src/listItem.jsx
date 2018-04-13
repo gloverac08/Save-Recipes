@@ -1,8 +1,10 @@
 import React from 'react';
-import { Card, Image} from 'semantic-ui-react';
+import { Card, Image } from 'semantic-ui-react';
 
 const ListItem = (props) => (
+  
   <div>
+    {console.log('props:', props)}
     <Card>
       <Image src={props.favItem.image} />
       <Card.Content>

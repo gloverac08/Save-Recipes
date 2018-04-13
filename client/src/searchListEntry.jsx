@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { Card, Image, Button, Icon, Popup } from 'semantic-ui-react';
 
 class SearchListEntry extends React.Component {
@@ -7,6 +8,10 @@ class SearchListEntry extends React.Component {
     this.state = {
       showPopup: false
     }
+  }
+
+  componentDidMount() {
+    console.log('this.props.user:', this.props.user);
   }
 
   addToFavs(recipe) {
@@ -47,18 +52,17 @@ class SearchListEntry extends React.Component {
           </Card.Content>
           <Card.Content extra>
             <a href={this.props.searchItem.link} target="_blank">See the full recipe</a>
-            {this.props.user ? 
+            {this.props.user !== 'sample' ? 
               <Popup
                 trigger={<Button
                   icon
                   style={{ float: 'right' }}
                   onClick={this.addToFavs.bind(this)}
-                >
+                  >
                   <Icon name='like' />
                 </Button>}
-                content='Added to your favorites'
+                content='Add to your favorites'
               /> : null}
-            }
           </Card.Content>
         </Card>
       </div>

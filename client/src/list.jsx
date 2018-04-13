@@ -8,7 +8,7 @@ const List = (props) => (
       <Grid.Row columns={4}>
         {props.favItems.map((item, index) =>
           <Grid.Column>
-            <ListItem favItem={item} key={index} />
+            <ListItem favItem={item} key={index} user={props.user} />
           </Grid.Column>
         )}
       </Grid.Row>

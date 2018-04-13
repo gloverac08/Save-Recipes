@@ -26,7 +26,7 @@ class App extends React.Component {
   componentDidMount () {
     // this.createAccount('amy', 'kitty');
     // this.search('wine');
-    this.getFavorites('initial');
+    this.getFavorites();
     // this.login('sample', 'sample');
   }
 
@@ -91,13 +91,13 @@ class App extends React.Component {
     return this.state.submitted2ndPasswordCreateAccount === this.state.submittedPasswordCreateAccount;
   }
 
-  getFavorites (type) {
+  getFavorites () {
     axios.post('/getFavorites', {
       username: this.state.user
     })
       .then(res => {
         console.log('res.data from post/getFavorites:', res.data);
-        if (type) {
+        if (this.state.user === 'sample') {
           this.setState({
             sampleSearch: res.data,
             favorites: res.data
@@ -222,8 +222,20 @@ class App extends React.Component {
             </span>
             :
             <span>
-              <Button style={styles.button} color='teal' size='medium'>View Favorites</Button>
-              <Button style={styles.button} color='teal' size='medium' onClick={this.logout.bind(this)} >Logout</Button>
+              <Button 
+                style={styles.button} 
+                color='teal' 
+                size='medium'
+                onClick={() => {this.getFavorites(); this.setState({searchItems: null})}}
+                >View Favorites
+              </Button>
+              <Button 
+                style={styles.button} 
+                color='teal' 
+                size='medium' 
+                onClick={this.logout.bind(this)} 
+                >Logout
+              </Button>
             </span>
             }
           </Header>

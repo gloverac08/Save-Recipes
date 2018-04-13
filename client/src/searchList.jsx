@@ -9,7 +9,7 @@ const SearchList = (props) => (
       <Grid.Row columns={4}>
         {props.searchItems.map((item, index) => 
           <Grid.Column>
-            <SearchListEntry searchItem={item} addToFavs={props.addToFavs} key={index} />
+            <SearchListEntry user={props.user} searchItem={item} addToFavs={props.addToFavs} key={index} />
           </Grid.Column>
         )}
       </Grid.Row>
