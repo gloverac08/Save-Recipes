@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Card, Icon, Image, Header, Segment, Input, Button, Modal, Form, Checkbox } from 'semantic-ui-react';
+import { Card, Header, Button, Modal, Form, Message } from 'semantic-ui-react';
 
 
 class Login extends React.Component {
@@ -9,7 +9,8 @@ class Login extends React.Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      error: false
     };
   }
 
@@ -29,6 +30,9 @@ class Login extends React.Component {
         this.props.login(res.data);
       })
       .catch(err => {
+        this.setState({
+          error: true
+        })
         console.log('error in post/login:', err);
       })
   }
@@ -44,13 +48,13 @@ class Login extends React.Component {
       <Modal trigger={<Button style={styles.button} color='teal' size='medium'>Login</Button>} closeIcon>
         <Header content='Login' />
         <Modal.Content>
-          <Form>
+          <Form error>
             <Form.Field>
               <label>Username</label>
               <input
                 placeholder='username'
                 name='submittedUsernameLogin'
-                onChange={(e) => this.handleChange(e, 'username')}
+                onChange={(e) => {this.handleChange(e, 'username'); this.state.error ? this.setState({error: false}) : null}}
               />
             </Form.Field>
             <Form.Field>
@@ -58,9 +62,14 @@ class Login extends React.Component {
               <input
                 placeholder='Password'
                 name='submittedPasswordPassword'
-                onChange={(e) => this.handleChange(e, 'password')}
+                onChange={(e) => {this.handleChange(e, 'password'); this.state.error ? this.setState({error: false}) : null}}
               />
             </Form.Field>
+            {this.state.error ?
+              <Message
+                error
+                content='Invalid Credentials'
+              /> : null}   
           </Form>
         </Modal.Content>
         <Modal.Actions>
