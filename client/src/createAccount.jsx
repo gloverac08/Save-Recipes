@@ -25,6 +25,10 @@ class CreateAccount extends React.Component {
     return this.state.password1 === this.state.password2;
   }
 
+  createAccount() {
+    this.props.createAccount(this.state.username, this.state.password1);
+  }
+
   render() {
     const styles = {
       button: {
@@ -69,7 +73,7 @@ class CreateAccount extends React.Component {
             </Form>
           </Modal.Content>
           <Modal.Actions>
-            <Button type='submit' onClick={this.props.createAccount.bind(this)}>Submit</Button>
+            <Button type='submit' onClick={this.createAccount.bind(this)}>Submit</Button>
           </Modal.Actions>
         </Modal>
       </div>

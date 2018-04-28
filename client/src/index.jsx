@@ -47,10 +47,10 @@ class App extends React.Component {
       });
   }
 
-  createAccount () { 
+  createAccount (username, password) { 
     axios.post('/createAccount', {
-      username: this.state.username,
-      password: this.state.password
+      username: username,
+      password: password
     })
       .then(res => {
         console.log('res from post/createAccount:', res.data);
@@ -63,10 +63,10 @@ class App extends React.Component {
       });
   }
 
-  login () {
+  login (username, password) {
     axios.post('/login', {
-      username: this.state.username,
-      password: this.state.password
+      username: username,
+      password: password
     })
       .then(res => {
         this.setState({
@@ -148,32 +148,9 @@ class App extends React.Component {
           <Header as='h2' floated='right' style={styles.segment}>
             {(this.state.user === 'sample') ? 
             <span>
-                <Modal trigger={<Button style={styles.button} color='teal' size='medium'>Login</Button>} closeIcon>
-                  <Header content='Login' />
-                  <Modal.Content>
-                    <Form>
-                      <Form.Field>
-                        <label>Username</label>
-                        <input 
-                          placeholder='username' 
-                          name='submittedUsernameLogin'
-                          onChange={(e) => this.handleChange(e, 'username')}  
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <label>Password</label>
-                        <input 
-                          placeholder='Password'
-                          name='submittedPasswordPassword'
-                          onChange={(e) => this.handleChange(e, 'password')}
-                         />
-                      </Form.Field>
-                    </Form>
-                  </Modal.Content>
-                  <Modal.Actions>
-                    <Button type='submit' onClick={this.login.bind(this)}>Submit</Button>
-                  </Modal.Actions>
-                </Modal>
+                <Login 
+                  login={this.login.bind(this)}
+                />
                 <CreateAccount
                   createAccount={this.createAccount.bind(this)}
                 />
