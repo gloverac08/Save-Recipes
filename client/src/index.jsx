@@ -87,13 +87,6 @@ class App extends React.Component {
       })
   }
 
-  handleChange(e, name) {
-    console.log('data: from handleChange', e.target.value);
-    this.setState({ 
-      [name]: e.target.value 
-    })
-  }
-
 
   render () {
     const styles = {

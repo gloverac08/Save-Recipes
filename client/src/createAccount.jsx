@@ -84,7 +84,7 @@ class CreateAccount extends React.Component {
                 <label>Re-enter Password</label>
                 <input
                   placeholder='Re-enter password'
-                  onChange={(e) => { this.validatePassword() ? this.handleChange(e, 'password2') : this.setState({passwordError: false}) }}
+                  onChange={(e) => {this.handleChange(e, 'password2'); this.state.passwordError ? this.setState({passwordError: false}) : null}}
                 />
                 {this.state.passwordError ? 
                   <Message
@@ -96,7 +96,7 @@ class CreateAccount extends React.Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button type='submit' onClick={this.createAccount.bind(this)}>Submit</Button>
+          <Button type='submit' onClick={() => {this.validatePassword() ? this.createAccount() : this.setState({passwordError: true})}}>Submit</Button>
         </Modal.Actions>
       </Modal>
     );
