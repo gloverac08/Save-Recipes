@@ -6,8 +6,9 @@ import { Card, Icon, Image, Header, Segment, Input, Button, Modal, Form, Checkbo
 import SearchList from './searchList.jsx';
 import List from './list.jsx';
 import Search from './search.jsx';
+import CreateAccount from './createAccount.jsx';
+import Login from './login.jsx';
 
-// import AnyComponent from './components/filename.jsx'
 
 class App extends React.Component {
   constructor(props) {
@@ -86,10 +87,6 @@ class App extends React.Component {
       user: 'sample'
     })
   }
-    
-  checkPassword () {
-    return this.state.submitted2ndPasswordCreateAccount === this.state.submittedPasswordCreateAccount;
-  }
 
   getFavorites () {
     axios.post('/getFavorites', {
@@ -130,7 +127,6 @@ class App extends React.Component {
   render () {
     const styles = {
       main: {
-        backgroundColor: '#e3e6eb',
         // marginBottom: 10
       },
       header: {
@@ -143,9 +139,6 @@ class App extends React.Component {
       },
       grid: {
         marginLeft: 40
-      },
-      button: {
-        margin: 10
       }
     }
 
@@ -181,44 +174,9 @@ class App extends React.Component {
                     <Button type='submit' onClick={this.login.bind(this)}>Submit</Button>
                   </Modal.Actions>
                 </Modal>
-                <Modal 
-                  trigger={<Button
-                    style={styles.button}
-                    color='teal'
-                    size='medium'
-                    >Create Account
-                      </Button> } 
-                  closeIcon>
-                  <Header content='Login' />
-                  <Modal.Content>
-                    <Form>
-                      <Form.Field>
-                        <label>Username</label>
-                        <input
-                          placeholder='username'
-                          onChange={(e) => this.handleChange(e, 'username')}
-                        />
-                      </Form.Field>
-                      <Form.Field>
-                        <label>Password</label>
-                        <input
-                          placeholder='Password'
-                            onChange={(e) => this.handleChange(e, 'password')}
-                        />
-                        <Form.Field>
-                          <label>Re-enter Password</label>
-                          <input
-                            placeholder='username'
-                              onChange={(e) => {this.checkPassword() ? this.handleChange(e, 'secondPassword') : null }}
-                          />
-                        </Form.Field>
-                      </Form.Field>
-                    </Form>
-                  </Modal.Content>
-                  <Modal.Actions>
-                    <Button type='submit' onClick={this.createAccount.bind(this)}>Submit</Button>
-                  </Modal.Actions>
-                </Modal>
+                <CreateAccount
+                  createAccount={this.createAccount.bind(this)}
+                />
             </span>
             :
             <span>
