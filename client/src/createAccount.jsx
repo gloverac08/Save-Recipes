@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Card, Icon, Image, Header, Segment, Input, Button, Modal, Form, Checkbox } from 'semantic-ui-react';
+import { Button, Modal, Form, Message, Header } from 'semantic-ui-react';
 
 
 class CreateAccount extends React.Component {
@@ -10,7 +10,9 @@ class CreateAccount extends React.Component {
     this.state = {
       username: '',
       password1: '',
-      password2: ''
+      password2: '',
+      usernameError: false,
+      passwordError: false
     }
   }
 
@@ -18,7 +20,7 @@ class CreateAccount extends React.Component {
     console.log('data: from handleChange', e.target.value);
     this.setState({
       [name]: e.target.value
-    })
+    });
   }
 
   validatePassword() {
@@ -26,7 +28,19 @@ class CreateAccount extends React.Component {
   }
 
   createAccount() {
-    this.props.createAccount(this.state.username, this.state.password1);
+    axios.post('/createAccount', {
+      username: this.state.username,
+      password: this.state.password1
+    })
+      .then(res => {
+        this.props.login(res.data);
+      })
+      .catch(err => {
+        console.log('error in post/createAccount:', err);
+        this.setState({
+          usernameError: true
+        })
+      });
   }
 
   render() {
@@ -34,49 +48,57 @@ class CreateAccount extends React.Component {
       button: {
         margin: 10
       }
-    }
+    };
 
     return (
-      <div>
-        <Modal
-          trigger={<Button
+      <Modal
+        trigger={<Button
             style={styles.button}
             color='teal'
             size='medium'
-          >Create Account
-                      </Button>}
-          closeIcon>
-          <Header content='Create Account' />
-          <Modal.Content>
-            <Form>
+            >Create Account
+          </Button>}
+        closeIcon>
+        <Header content='Create Account' />
+        <Modal.Content>
+          <Form error>
+            <Form.Field>
+              <label>Username</label>
+              <input
+                placeholder='username'
+                onChange={(e) => {this.handleChange(e, 'username'); this.state.usernameError ? this.setState({usernameError: false}) : null}}
+              />
+            </Form.Field>
+            {this.state.usernameError ? 
+              <Message
+                error
+                content='Username already taken. Please choose a unique username.'
+              /> : null}
+            <Form.Field>
+              <label>Password</label>
+              <input
+                placeholder='Password'
+                onChange={(e) => {this.handleChange(e, 'password1'); this.state.passwordError ? this.setState({passwordError: false}) : null}}
+              />
               <Form.Field>
-                <label>Username</label>
+                <label>Re-enter Password</label>
                 <input
-                  placeholder='username'
-                  onChange={(e) => this.handleChange(e, 'username')}
+                  placeholder='Re-enter password'
+                  onChange={(e) => { this.validatePassword() ? this.handleChange(e, 'password2') : this.setState({passwordError: false}) }}
                 />
+                {this.state.passwordError ? 
+                  <Message
+                    error
+                    content='Passwords must match'
+                  /> : null}          
               </Form.Field>
-              <Form.Field>
-                <label>Password</label>
-                <input
-                  placeholder='Password'
-                  onChange={(e) => this.handleChange(e, 'password1')}
-                />
-                <Form.Field>
-                  <label>Re-enter Password</label>
-                  <input
-                    placeholder='Re-enter password'
-                    onChange={(e) => { this.props.validatePassword() ? this.handleChange(e, 'password2') : null }}
-                  />
-                </Form.Field>
-              </Form.Field>
-            </Form>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button type='submit' onClick={this.createAccount.bind(this)}>Submit</Button>
-          </Modal.Actions>
-        </Modal>
-      </div>
+            </Form.Field>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button type='submit' onClick={this.createAccount.bind(this)}>Submit</Button>
+        </Modal.Actions>
+      </Modal>
     );
   }
 }

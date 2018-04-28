@@ -17,10 +17,8 @@ class App extends React.Component {
       user: 'sample',
       searchItems: '',
       favorties: null,
-      username: '',
-      password: '',
       secondPassword: '',
-      sampleSearch: ''
+      sampleSearch: '',
   	}
   }
 
@@ -47,39 +45,12 @@ class App extends React.Component {
       });
   }
 
-  createAccount (username, password) { 
-    axios.post('/createAccount', {
-      username: username,
-      password: password
+  login(username) {
+    this.setState({
+      user: username
+    }, () => {
+      this.getFavorites();
     })
-      .then(res => {
-        console.log('res from post/createAccount:', res.data);
-        this.setState({
-          user: res.data
-        });
-      })
-      .catch(err => {
-        console.log('error in post/createAccount:', err);
-      });
-  }
-
-  login (username, password) {
-    axios.post('/login', {
-      username: username,
-      password: password
-    })
-      .then(res => {
-        this.setState({
-          user: res.data
-        }, () => {
-          console.log('this.state.user:', this.state.user);
-          this.getFavorites()
-          // this.addToFavs(this.state.searchItems[2]);
-        })
-      })
-      .catch(err => {
-        console.log('error in post/login:', err);
-      })
   }
 
   logout () {
@@ -152,7 +123,7 @@ class App extends React.Component {
                   login={this.login.bind(this)}
                 />
                 <CreateAccount
-                  createAccount={this.createAccount.bind(this)}
+                  login={this.login.bind(this)}
                 />
             </span>
             :

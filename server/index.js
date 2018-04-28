@@ -27,7 +27,7 @@ app.post('/login', (req, res) => {
   console.log('req.body in /login:', req.body);
   helpers.checkUser(req.body.username, req.body.password, (err, user) => {
     if (err) {
-      res.status(400).end();
+      res.status(400).end('usernameAlreadyTaken');
     }
     res.send(user);
   });
