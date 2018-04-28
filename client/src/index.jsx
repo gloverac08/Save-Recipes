@@ -103,6 +103,9 @@ class App extends React.Component {
       },
       grid: {
         marginLeft: 40
+      },
+      button: {
+        margin: 10
       }
     }
 
